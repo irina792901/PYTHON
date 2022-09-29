@@ -43,3 +43,16 @@ else:
             answer = 2
     print("Точка находится в {} четверти плоскости".format(answer))
 
+# Вариант, разобранный на занятии:
+#x = int(input())
+#y = int(input())
+#if x > 0 and y > 0:
+#    print(1)
+#elif x < 0 and y > 0:
+#    print(2)
+#elif x < 0 and y < 0:
+#    print(3)
+#elif x > 0 and y < 0:
+#    print(4)
+#else:
+#    print("Error, 0 entered!")

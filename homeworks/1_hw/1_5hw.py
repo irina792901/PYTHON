@@ -29,3 +29,9 @@ for i in range(4):
 distance_between_2_points=round(((coordinats[0]-coordinats[2])**2+(coordinats[1]-coordinats[3])**2)**0.5, 3)
 print("Расстояние между двумя точками = ", distance_between_2_points)
 
+# Странный вариант округления, рассмотренный на занятии
+#x_1 = int(input())
+#y_1 = int(input())
+#x_2 = int(input())
+#y_2 = int(input())
+#print(f"{((x_2 - x_1) ** 2 + (y_2 - y_1) ** 2) ** 0.5:0.4}")
