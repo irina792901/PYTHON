@@ -40,3 +40,4 @@ list_from_number = get_list_from_0_to_N(num)
 new_list = mixed_list(list_from_number, num)
 print(list_from_number)
 print(new_list)
+
