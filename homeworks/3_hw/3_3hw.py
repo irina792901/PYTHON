@@ -16,9 +16,8 @@ def from_decimal_to_bin(number):
         x = number
     x = int(x)
     while x > 0:
-        list.append(x%2)
+        list.insert(0, x%2)
         x //= 2
-    list.reverse()
     y = abs(number) % 1 # Если чилсо дробное
     if y > 0:
         list.append('.')
