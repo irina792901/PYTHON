@@ -10,13 +10,13 @@ def creating(file='Phonebook.csv', path=path1):# file='Phonebook.txt'
     file = file
     with open (file, 'a', encoding = 'utf-8') as data:
         for row in rows:
-            data.write(convert_tuple(row))
+            data.write(' | '.join([str[i] for i in list(row)]))
     db.close()
 
 def convert_tuple(c_tuple):
     str=''
     for i in c_tuple: 
-        str=str+i 
+        str=str + i 
     return str
 
  
