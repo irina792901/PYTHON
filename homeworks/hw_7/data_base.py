@@ -112,29 +112,34 @@ def db_fetch(value1, value2, path = path1):
         db.commit()
         db.close()
 
-
-
 def db_fetch_all_tables(path= path1):
     db = sqlite3.connect(path)
     c = db.cursor()
     c.execute('SELECT name from sqlite_master where type= "table"')
     print(c.fetchall())
 
+lst = [('Ширяев','Артём','98798798797','доброта'), ('Колкина','Милена','654654654','знающая'),('Бородатыый','Сергей','456987654','нужный')]
 
-def import_list_of_tuples(data: list, path=path1):
+def import_list_of_tuples(data=lst, path=path1):
     db = sqlite3.connect(path)
     c = db.cursor()
-    c.execute('''Select id FROM users 
-    WHERE last_name = ? AND first_name = ?''', data[0], data[1])
-    row = c.fetchone()
-    c.execute('''INSERT INTO phones(user_id, phone, comment)
-    VALUES(?, ?, ?)''', (row[0], data[2], data[3]))
-    rows = c.fetchone()
-    print("Фамилия:", row[0][0])
-    print("Имя:", row[0][1])
-    print("Телефон:", row[0][2])
-    print("Комментарий:", row[0][3])
-    db.commit()
+    for i in range(len(data)):
+        try:
+            c.execute('''Select id FROM users 
+            WHERE last_name = ? AND first_name = ?''', (data[i][0], data[i][1]))
+            row = c.fetchone()
+            c.execute('''INSERT INTO phones(user_id, phone, comment)
+            VALUES(?, ?, ?)''', (row, data[i][2], data[i][3]))
+            db.commit()
+            c.execute('''SELECT users.id, users.last_name, users.first_name, phones.phone, phones.comment
+            FROM users, phones WHERE phones.user_id = users.id 
+            AND last_name = ? AND first_name = ?''', (data[i][0], data[i][1]))
+            rows = c.fetchall()
+            print("Вы ввели:\n")
+            u.print_array_of_tuples(rows)
+        except Error as e:
+            print(e)
+            print("И вот из-за этого всё и отвалилось...")
     db.close()
 
 

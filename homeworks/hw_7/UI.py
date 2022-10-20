@@ -48,33 +48,30 @@ def format():
     для JSON:                       3
     для XML:                        4
     для HTML:                       5
-    для выхода:                     q"""
+    для выхода:    любая другая цифра"""
     print(menu)
     return input("Ввод: ")
 
 def check_name(name):
-    while not name.isalpha():
+    if not name.isalpha():
         print("""Error! 
          Можно вводить русские 
          или латинские буквы!""")
-        name = input("Попоробуйте снова: ")
     name = name.lower()
     name = name.capitalize()
     return name
 
 def check_phone(phone):
-    while not (phone.isdigit() and 4<len(phone)<16):
+    if not (phone.isdigit() and 4<len(phone)<16):
         print(""" 
         Можно вводить только цифры
         в количестве от 5 до 15""")
-        phone = input("Введите номер телефона: ")
     return phone
 
 def check_comment(name):
-    while len(name)>255:
+    if len(name)>255:
         print('''Длина комментария не должна
-        быть более 40 символов''')
-        name = input("Введите комментарий: ")
+       быть более 40 символов''')
     return name
 
 
