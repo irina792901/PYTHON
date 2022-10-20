@@ -5,9 +5,9 @@ def main_menu():
     print('-'*40)
     menu = '''Введите
     для поиска:           фамилию абонента
-    для добавления нового абонента:      1 
-    для просмотра справочника:           2
-    для загрузки из другого справочника: 3'''
+    для просмотра справочника:           1
+    для загрузки из другого справочника: 2
+    для выхода:                          q'''
     print(menu)
     return input("Ввод: ")
 
@@ -24,10 +24,9 @@ def choice2_menu():
     print('-'*40)
     menu = """Введите
     для добавления номера телефона:     1
-    для удаления номера телефона:       2
+    для удаления номерoв телефона:      2
     для удаление абонента из базы:      3
-    для возврата в предыдущее меню :    r
-    для выхода:                         q"""
+    для выхода:        любую другую цифру"""
     print(menu)
     return input("Ввод: ")
 
@@ -36,7 +35,7 @@ def export():
     menu = '''Введите
     для выгрузки справочника на экран:   1
     для выгрузки данных в файл:          2
-    для выхода:                          q'''
+    для перехода в предыдущее менюf:     r'''
     print(menu)
     return input("Ввод: ")
 
@@ -67,21 +66,17 @@ def enter_phone():
     while not phone.isdigit:
         print("""      Error! 
         Можно вводить только цифры.""")
+        phone = input("Введите номер телефона: ")
     return phone
 
 def enter_comment():
     comment = input ("Введите комментарий: ")
     return comment
 
-def add_contact():
-    name = input('Введите имя: ')
-    firstname = input('Введите фамилию: ')
-    phone = input('Введите номер телефона: ')
-    directory = name + ' ' + firstname + '||' + phone + '\n'
-    return directory
-
-
-def find_contact(f):
-        a = input('Введите данные для поиска: ')
-        fnd = list(filter(lambda x: a in x, f.split('\n')))
-        return fnd
+def print_array_of_tuples(array):
+    for tuple in array:
+        print("id: ", tuple[0])
+        print("Фамилия:", tuple[1])
+        print("Имя:", tuple[2])
+        print("Телефон:", tuple[3])
+        print("Комментарий:", tuple[4], end = "\n\n")
