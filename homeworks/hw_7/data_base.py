@@ -42,16 +42,17 @@ def db_fetch(value1, value2, path = path1):
         AND first_name = ?''', (value1, value2))
         rows = c.fetchall()
         u.print_array_of_tuples(rows)
+        if len(rows) > 1:
+            rows = rows[0][0]
         answer = u.choice2_menu()
         if answer == '1':
             phone = u.enter_phone()
             comment = u.enter_comment()
             c.execute('''INSERT INTO phones(user_id, phone, comment) 
-            VALUES(?, ?, ?)''', (rows[0], phone, comment))
+            VALUES(?, ?, ?)''', (rows, phone, comment))
             db.commit()
-            exit()
-        if answer == '2':
-            print("Какой номер телефону удалить?")
+        elif answer == '2':
+            print("Какой номер телефона удалить?")
             old_value = u.enter_phone()
             try:
                 c.execute('SELECT phone_id FROM phones WHERE phone = ?', (old_value,))
@@ -60,29 +61,28 @@ def db_fetch(value1, value2, path = path1):
                 new_value = u.enter_phone()           
                 c.execute('UPDATE phones SET phone = ? WHERE id = ?', (new_value, id))
                 db.commit()
-                print("Исполненио")           
-                exit()
+                print("Исполненио")    
             except Error:
-                print("Упс, что-то пошло не так...")
-                exit()
-        if answer == '3':
+                print("Упс, что-то пошло не так...")    
+        elif answer == '3':
             phone = u.enter_phone()
             try: 
                 c.execute('''SELECT phone_id FRON phones WHERE 
-                user_id = ? AND phone = ?''', (rows[0], phone))
+                user_id = ? AND phone = ?''', (rows, phone))
                 id = c.fetchall()
                 c.execute('''DELETE FROM phones
                 WHERE user_id = ?''', (id,))
                 db.commit()
             except Error:
                 print("Упс, что-то пошло не так...")
-            exit()
-        if answer == '4':
+        elif answer == '4':
             try:
-                c.execute('''DELETE FROM users, phones 
-                WHERE users.id = phones.user_id = ?''', (rows[0]))
+                c.execute('''DELETE FROM phones 
+                WHERE user_id = ?''', (rows,))
                 db.commit()
-                exit()
+                c.execute('''DELETE FROM users WHERE 
+                id = ?''', (rows,))
+                db.commit()
             except Error:
                 print("Попытайтесь позже...")
         else:
@@ -98,7 +98,7 @@ def db_fetch(value1, value2, path = path1):
         c.execute('''INSERT INTO phones(user_id, phone, comment) 
         VALUES(?, ?, ?)''', (temp[0], phone, comment))
         db.commit()
-        c.execute('''SELECT users.last_name, users.first_name, phones.phone, phones.comment
+        c.execute('''SELECT users.id, users.last_name, users.first_name, phones.phone, phones.comment
         FROM users, phones WHERE phones.user_id = users.id 
         AND last_name = ? AND first_name = ?''', (value1, value2))
         rows = c.fetchall()
@@ -107,6 +107,8 @@ def db_fetch(value1, value2, path = path1):
     finally:
         db.commit()
         db.close()
+
+
 
 def db_fetch_all_tables(path= path1):
     db = sqlite3.connect(path)

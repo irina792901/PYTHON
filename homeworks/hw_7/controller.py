@@ -32,7 +32,8 @@ def BUTTON():
             print(name)
             print("Ищу по базе...")
             d.db_fetch(family, name)
-            continue
+            break
+            
 
 
             

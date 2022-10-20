@@ -53,20 +53,21 @@ def format():
     return input("Ввод: ")
 
 def check_name(name):
-    while not name.isalpha:
-        print("""      Error! 
-        Можно вводить русские 
-        или латинские буквы!""")
+    while not name.isalpha():
+        print("""Error! 
+         Можно вводить русские 
+         или латинские буквы!""")
         name = input("Попоробуйте снова: ")
     name = name.lower()
     name = name.capitalize()
     return name
 
 def enter_phone():
-    phone = input("Введите номер телефона: ")
-    while not phone.isdigit:
-        print("""      Error! 
-        Можно вводить только цифры.""")
+    phone = 'абракадабра_очень_длинная'
+    while not (phone.isdigit() and 5<len(phone)<15):
+        print(""" 
+        Можно вводить только цифры
+        в количестве от 5 до 15""")
         phone = input("Введите номер телефона: ")
     return phone
 
