@@ -41,6 +41,7 @@ https://unicode-table.com/ru/emoji/
 https://informatika.shkolkovo.net/catalog/igry/prostejshie-igry-poisk-vyigryshnoj-strategii
 
 Укус питона (коротко, по теме), Лутц, Бизли и Грокаем алгоритмы - MUST HAVE!!!!!!!!!!
+https://docs-python.ru/packages/biblioteka-python-telegram-bot-python/sozdanie-razgovorov-conversationhandler/
 
 
 ## FEATURES from lessons

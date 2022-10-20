@@ -53,25 +53,28 @@ def format():
     return input("Ввод: ")
 
 def check_name(name):
-    if not name.isalpha():
+    while not name.isalpha():
         print("""Error! 
          Можно вводить русские 
          или латинские буквы!""")
+        name = input("Попоробуйте снова: ")
     name = name.lower()
     name = name.capitalize()
     return name
 
 def check_phone(phone):
-    if not (phone.isdigit() and 4<len(phone)<16):
+    while not (phone.isdigit() and 4<len(phone)<16):
         print(""" 
         Можно вводить только цифры
         в количестве от 5 до 15""")
+        phone = input("Введите номер телефона: ")
     return phone
 
 def check_comment(name):
     if len(name)>255:
         print('''Длина комментария не должна
-       быть более 40 символов''')
+        быть более 40 символов''')
+        name = input("Введите комментарий: ")
     return name
 
 
