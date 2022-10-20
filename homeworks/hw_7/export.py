@@ -1,23 +1,22 @@
-def creating ():
-    file = 'Phonebook.csv'
-    with open (file, 'w', encoding = 'utf-8') as data:
-        data.write(f'Фамилия;Имя;Номер телефона;Описание\n')
-
-def writing_scv (info):
-    file = 'Phonebook.csv'
+import sqlite3
+path1 = '.\homeworks\hw_7\phone_book.db'
+def creating(file='Phonebook.csv', path=path1):# file='Phonebook.txt'
+    db = sqlite3.connect(path)
+    c = db.cursor()
+    c.execute('''SELECT users.id, users.last_name, users.first_name,
+    phones.phone, phones.comment FROM users, phones WHERE 
+    users.id = phones.user_id''')
+    rows = c.fetchall()
+    file = file
     with open (file, 'a', encoding = 'utf-8') as data:
-        data.write(f'{info[0]};{info[1]};{info[2]};{info[3]}\n')
+        for row in rows:
+            data.write(convert_tuple(row))
+    db.close()
 
-def writing_txt(info):
-    file = 'Phonebook.txt'
-    with open (file, 'a', encoding = 'utf-8') as data:
-        data.write(f'Фамилия: {info[0]}\n\nИмя: {info[1]}\n\nНомер телефона: {info[2]}\n\nОписание: {info[3]}\n\n\n')
+def convert_tuple(c_tuple):
+    str=''
+    for i in c_tuple: 
+        str=str+i 
+    return str
 
-def write_contact(b):
-    with open ('directory.txt', 'a', encoding='utf-8') as f:
-        f.write(b)
-
-def read_contact():
-    with open ('directory.txt', 'r', encoding='utf-8') as f:
-        return f.read()
-
+ 

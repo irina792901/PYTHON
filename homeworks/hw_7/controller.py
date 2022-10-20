@@ -1,5 +1,6 @@
 import data_base as d
 import UI as u
+import export as e
 def BUTTON():
     d.db_creating()
     while True:
@@ -18,15 +19,15 @@ def BUTTON():
             elif format_export == "2":
                 file = u.format()
                 if file == "1":# в txt
-                    break # TODO
+                    e.creating(file = 'Phonebook.txt')
                 elif file == '2':# csv
-                    break # TODO
+                    e.creating()
                 elif file == '3':# json
                     break # TODO
                 elif file == '4':# xml
                     break # TODO
                 elif file == '5':# html
-                    break # TOSO
+                    break # TODO
                 else:
                     break
             else:
