@@ -62,18 +62,21 @@ def check_name(name):
     name = name.capitalize()
     return name
 
-def enter_phone():
-    phone = 'абракадабра_очень_длинная'
-    while not (phone.isdigit() and 5<len(phone)<15):
+def check_phone(phone):
+    while not (phone.isdigit() and 4<len(phone)<16):
         print(""" 
         Можно вводить только цифры
         в количестве от 5 до 15""")
         phone = input("Введите номер телефона: ")
     return phone
 
-def enter_comment():
-    comment = input ("Введите комментарий: ")
-    return comment
+def check_comment(name):
+    while len(name)>255:
+        print('''Длина комментария не должна
+        быть более 40 символов''')
+        name = input("Введите комментарий: ")
+    return name
+
 
 def print_array_of_tuples(array):
     for tuple in array:

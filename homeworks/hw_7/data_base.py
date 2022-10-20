@@ -1,7 +1,8 @@
 import sqlite3
 from sqlite3 import Error
 import UI as u
-
+import datetime
+now = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 path1 = '.\homeworks\hw_7\phone_book.db'
 
 def db_creating(path=path1):
@@ -46,32 +47,35 @@ def db_fetch(value1, value2, path = path1):
             rows = rows[0][0]
         answer = u.choice2_menu()
         if answer == '1':
-            phone = u.enter_phone()
-            comment = u.enter_comment()
+            phone = input("Введите номер телефона: ")
+            phone = u.check_phone(phone)
+            comment = input("Введите комментарий: ")
+            comment = u.check_comment(comment)
             c.execute('''INSERT INTO phones(user_id, phone, comment) 
             VALUES(?, ?, ?)''', (rows, phone, comment))
             db.commit()
         elif answer == '2':
             print("Какой номер телефона удалить?")
-            old_value = u.enter_phone()
+            old_phone = input("Введите номер телефона: ")
+            old_phone = u.check_phone(old_phone)
             try:
-                c.execute('SELECT phone_id FROM phones WHERE phone = ?', (old_value,))
+                c.execute('SELECT phone_id FROM phones WHERE phone = ?', (old_phone,))
                 print("На какой номер телефона поменять?")
-                id = c.fetchone()
-                new_value = u.enter_phone()           
-                c.execute('UPDATE phones SET phone = ? WHERE id = ?', (new_value, id))
+                new_phone = input("Введите номер телефона: ")
+                new_phone = u.check_phone(new_phone)      
+                c.execute('UPDATE phones SET phone = ? WHERE id = ?', (new_phone, c.fetchone()[0]))
                 db.commit()
-                print("Исполненио")    
+                print("Исполнено")    
             except Error:
                 print("Упс, что-то пошло не так...")    
         elif answer == '3':
-            phone = u.enter_phone()
             try: 
+                phone = input("Введите номер телефона: ")
+                phone = u.check_phone(phone)
                 c.execute('''SELECT phone_id FRON phones WHERE 
                 user_id = ? AND phone = ?''', (rows, phone))
-                id = c.fetchall()
                 c.execute('''DELETE FROM phones
-                WHERE user_id = ?''', (id,))
+                WHERE user_id = ?''', c.fetchall())
                 db.commit()
             except Error:
                 print("Упс, что-то пошло не так...")
@@ -92,11 +96,11 @@ def db_fetch(value1, value2, path = path1):
         db.commit()
         c.execute('''SELECT id from users
         WHERE last_name = ? AND first_name = ?''', (value1, value2))
-        temp = c.fetchone()
-        phone = u.enter_phone()
-        comment = u.enter_comment()
+        phone = input("Введите номер телефона: ")
+        phone = u.check_phone(phone)
+        comment = input("Введите комментарий: ")
         c.execute('''INSERT INTO phones(user_id, phone, comment) 
-        VALUES(?, ?, ?)''', (temp[0], phone, comment))
+        VALUES(?, ?, ?)''', (c.fetchone()[0], phone, comment))
         db.commit()
         c.execute('''SELECT users.id, users.last_name, users.first_name, phones.phone, phones.comment
         FROM users, phones WHERE phones.user_id = users.id 
