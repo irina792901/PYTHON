@@ -22,12 +22,6 @@ def db_creating(path=path1):
         db.commit()
         db.close()
 
-def update_db_table(db, position, new_value, user_iden):
-    c = db.cursor()
-    c.execute(f'UPDATE users SET {position} = "{new_value}" where user_id = {user_iden}')
-    db.commit()
-    db.close()
-
 def print_db(path=path1):
     db = sqlite3.connect(path)
     c = db.cursor()
@@ -35,39 +29,19 @@ def print_db(path=path1):
     phones.phone, phones.comment FROM users, phones WHERE 
     users.id = phones.user_id''')
     rows = c.fetchall()
-    for row in rows:
-        print("id: ", row[0])
-        print("Фамилия:", row[1])
-        print("Имя:", row[2])
-        print("Телефон:", row[3])
-        print("Комментарий:", row[4], end = "\n\n")
+    u.print_array_of_tuples(rows)
     db.commit()
     db.close()
 
-def db_fetch(value, path = path1):
+def db_fetch(value1, value2, path = path1):
     db = sqlite3.connect(path)
     c = db.cursor()
     try:
         c.execute('''SELECT users.id, users.last_name, users.first_name, phones.phone, phones.comment
-        FROM users, phones WHERE phones.user_id=users.id AND last_name = ?''', (value,))
+        FROM users, phones WHERE phones.user_id=users.id AND last_name = ?
+        AND first_name = ?''', (value1, value2))
         rows = c.fetchall()
-        counter = len(rows)
-        if counter == 1:
-            u.print_array_of_tuples(rows)
-        name = input("Введите имя абонента: ")
-        name = u.check_name(name)
-        try:
-            c.execute('''SELECT users.id, users.last_name, users.first_name, phones.phone, phones.comment
-            FROM users, phones WHERE phones.user_id=users.id AND last_name = ?
-            AND first_name = ?''', (value, name))
-            rows = c.fetchall()
-            u.print_array_of_tuples(rows)
-        except Error:
-            name = u.check_name(name)
-            print(name)
-            c.execute('INSERT INTO users(last_name, first_name) VALUES(?, ?)', (value, name))
-            db.commit()
-            exit()
+        u.print_array_of_tuples(rows)
         answer = u.choice2_menu()
         if answer == '1':
             phone = u.enter_phone()
@@ -75,35 +49,61 @@ def db_fetch(value, path = path1):
             c.execute('''INSERT INTO phones(user_id, phone, comment) 
             VALUES(?, ?, ?)''', (rows[0], phone, comment))
             db.commit()
-        elif answer == '2':
-            c.execute('''DELETE FROM users AND phones  
-            WHERE users.id = phones.user_id = ?''', (rows[0]))
-            db.commit()
+            exit()
+        if answer == '2':
+            print("Какой номер телефону удалить?")
+            old_value = u.enter_phone()
+            try:
+                c.execute('SELECT phone_id FROM phones WHERE phone = ?', (old_value,))
+                print("На какой номер телефона поменять?")
+                id = c.fetchone()
+                new_value = u.enter_phone()           
+                c.execute('UPDATE phones SET phone = ? WHERE id = ?', (new_value, id))
+                db.commit()
+                print("Исполненио")           
+                exit()
+            except Error:
+                print("Упс, что-то пошло не так...")
+                exit()
+        if answer == '3':
+            phone = u.enter_phone()
+            try: 
+                c.execute('''SELECT phone_id FRON phones WHERE 
+                user_id = ? AND phone = ?''', (rows[0], phone))
+                id = c.fetchall()
+                c.execute('''DELETE FROM phones
+                WHERE user_id = ?''', (id,))
+                db.commit()
+            except Error:
+                print("Упс, что-то пошло не так...")
+            exit()
+        if answer == '4':
+            try:
+                c.execute('''DELETE FROM users, phones 
+                WHERE users.id = phones.user_id = ?''', (rows[0]))
+                db.commit()
+                exit()
+            except Error:
+                print("Попытайтесь позже...")
         else:
             exit()
     except Error:
-        name = u.choice_menu()
-        if name == 'q':
-            exit()
-        else:
-            name = u.check_name(name)
-            print(name)
-            c.execute('INSERT INTO users(last_name, first_name) VALUES(?, ?)', (value, name))
-            db.commit()
-            c.execute('''SELECT id from users
-            WHERE last_name = ? AND first_name = ?''', (value, name))
-            temp = c.fetchone()
-            phone = u.enter_phone()
-            comment = u.enter_comment()
-            c.execute('''INSERT INTO phones(user_id, phone, comment) 
-            VALUES(?, ?, ?)''', (temp[0], phone, comment))
-            db.commit()
-            c.execute('''SELECT users.last_name, users.first_name, phones.phone, phones.comment
-            FROM users, phones WHERE phones.user_id = users.id 
-            AND last_name = ? AND first_name = ?''', (value, name))
-            rows = c.fetchall()
-            print("Вы ввели:\n")
-            u.print_array_of_tuples(rows)
+        c.execute('INSERT INTO users(last_name, first_name) VALUES(?, ?)', (value1, value2))
+        db.commit()
+        c.execute('''SELECT id from users
+        WHERE last_name = ? AND first_name = ?''', (value1, value2))
+        temp = c.fetchone()
+        phone = u.enter_phone()
+        comment = u.enter_comment()
+        c.execute('''INSERT INTO phones(user_id, phone, comment) 
+        VALUES(?, ?, ?)''', (temp[0], phone, comment))
+        db.commit()
+        c.execute('''SELECT users.last_name, users.first_name, phones.phone, phones.comment
+        FROM users, phones WHERE phones.user_id = users.id 
+        AND last_name = ? AND first_name = ?''', (value1, value2))
+        rows = c.fetchall()
+        print("Вы ввели:\n")
+        u.print_array_of_tuples(rows)
     finally:
         db.commit()
         db.close()

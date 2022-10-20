@@ -26,8 +26,12 @@ def BUTTON():
             #TODO
         else:
             family = u.check_name(family)
+            name = input("Введите, пожалуйста, имя абонента: ")
+            name = u.check_name(name)
             print(family)
-            d.db_fetch(family)
+            print(name)
+            print("Ищу по базе...")
+            d.db_fetch(family, name)
             continue
 
 
