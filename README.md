@@ -43,6 +43,7 @@ https://informatika.shkolkovo.net/catalog/igry/prostejshie-igry-poisk-vyigryshno
 Укус питона (коротко, по теме), Лутц, Бизли и Грокаем алгоритмы - MUST HAVE!!!!!!!!!!
 https://docs-python.ru/packages/biblioteka-python-telegram-bot-python/sozdanie-razgovorov-conversationhandler/
 
+pip install python-telegram-bot
 
 ## FEATURES from lessons
 
